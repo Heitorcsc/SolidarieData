@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Prontuário</title>
+
+    <!-- 1. Script do Tailwind CSS (agora com o plugin 'forms') -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+
+    <!-- 2. Script do Modo Noturno (O Cérebro) -->
+    <script>
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+        function toggleTheme() {
+            if (localStorage.theme === 'dark') {
+                localStorage.theme = 'light'
+                document.documentElement.classList.remove('dark')
+            } else {
+                localStorage.theme = 'dark'
+                document.documentElement.classList.add('dark')
+            }
+        }
+    </script>
+
+    <!-- 3. Configuração das Cores (Sem o 'require') -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'solidarie-primary': '#2F6A6D',
+                        'solidarie-secondary': '#AEC5D0',
+                    }
+                }
+            }
+            // O plugin 'forms' já foi carregado no script principal
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900">
+
+    <div class="container mx-auto max-w-4xl my-12 px-4">
+
+        <!-- Botão de Modo Noturno -->
+        <div class="absolute top-5 right-5">
+            <button onclick="toggleTheme()"
+                class="p-2 rounded-full text-gray-600 dark:text-gray-300 bg-white dark:bg-slate-800 shadow-md hover:bg-gray-100 dark:hover:bg-slate-700">
+                <span class="dark:hidden"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="currentColor" class="bi bi-moon-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z" />
+                    </svg></span>
+                <span class="hidden dark:inline"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="currentColor" class="bi bi-brightness-high-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M12 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z" />
+                    </svg></span>
+            </button>
+        </div>
+
+        <form action="{{ url_for('criar_prontuario') }}" method="POST">
+            <div class="bg-white dark:bg-gray-800 p-8 md:p-12 rounded-xl shadow-lg space-y-10">
+
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100">Novo Prontuário de Paciente</h1>
+
+                <!-- Seção: Dados do Paciente -->
+                <fieldset>
+                    <legend
+                        class="text-xl font-semibold text-solidarie-primary dark:text-solidarie-secondary mb-6 border-b border-gray-300 dark:border-gray-600 pb-2">
+                        Informações do Paciente</legend>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="md:col-span-2">
+                            <label for="nome_paciente"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nome do
+                                Paciente</label>
+                            <input type="text" name="nome_paciente" id="nome_paciente"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-solidarie-primary focus:ring-solidarie-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                required>
+                        </div>
+                        <div>
+                            <label for="idade"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Idade</label>
+                            <input type="number" name="idade" id="idade"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-solidarie-primary focus:ring-solidarie-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <div>
+                            <label for="profissao"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Profissão</label>
+                            <input type="text" name="profissao" id="profissao"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-solidarie-primary focus:ring-solidarie-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="endereco_paciente"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Endereço</label>
+                            <input type="text" name="endereco_paciente" id="endereco_paciente"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-solidarie-primary focus:ring-solidarie-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <div>
+                            <label for="bairro"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Bairro</label>
+                            <input type="text" name="bairro" id="bairro"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-solidarie-primary focus:ring-solidarie-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <div>
+                            <label for="cidade"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Cidade</label>
+                            <input type="text" name="cidade" id="cidade"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-solidarie-primary focus:ring-solidarie-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <div>
+                            <label for="telefone"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Telefone</label>
+                            <input type="tel" name="telefone" id="telefone"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-solidarie-primary focus:ring-solidarie-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <div>
+                            <label for="convenio"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Convênio</label>
+                            <input type="text" name="convenio" id="convenio"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-solidarie-primary focus:ring-solidarie-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Seção: Anamnese -->
+                <fieldset>
+                    <legend
+                        class="text-xl font-semibold text-solidarie-primary dark:text-solidarie-secondary mb-6 border-b border-gray-300 dark:border-gray-600 pb-2">
+                        Ficha de Anamnese</legend>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="data_nascimento"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Data de Nascimento
+                                (AAAA-MM-DD)</label>
+                            <input type="date" name="data_nascimento" id="data_nascimento"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-solidarie-primary focus:ring-solidarie-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <div>
+                            <label for="tipo_sanguineo"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tipo
+                                Sanguíneo</label>
+                            <select id="tipo_sanguineo" name="tipo_sanguineo"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-solidarie-primary focus:ring-solidarie-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option>Não sei</option>
+                                <option>A+</option>
+                                <option>A-</option>
+                                <option>B+</option>
+                                <option>B-</option>
+                                <option>AB+</option>
+                                <option>AB-</option>
+                                <option>O+</option>
+                                <option>O-</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="contato_emergencia_nome"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Contato de
+                                Emergência</label>
+                            <input type="text" name="contato_emergencia_nome" id="contato_emergencia_nome"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-solidarie-primary focus:ring-solidarie-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <div>
+                            <label for="contato_emergencia_telefone"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Telefone de
+                                Emergência</label>
+                            <input type="tel" name="contato_emergencia_telefone" id="contato_emergencia_telefone"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-solidarie-primary focus:ring-solidarie-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                    </div>
+                    <div class="space-y-6 mt-6 text-sm text-gray-700 dark:text-gray-300">
+                        <!-- Seguro, Fumante, Alergia, etc... -->
+                        <div>
+                            <label class="block font-medium">Tem Seguro de Saúde?</label>
+                            <div class="mt-2 flex gap-x-6">
+                                <label><input type="radio" name="tem_seguro" value="sim"
+                                        class="mr-1 text-solidarie-primary focus:ring-solidarie-primary"> Sim</label>
+                                <label><input type="radio" name="tem_seguro" value="nao"
+                                        class="mr-1 text-solidarie-primary focus:ring-solidarie-primary"> Não</label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block font-medium">É fumante?</label>
+                            <div class="mt-2 flex gap-x-6">
+                                <label><input type="radio" name="fumante" value="sim"
+                                        class="mr-1 text-solidarie-primary focus:ring-solidarie-primary"> Sim</label>
+                                <label><input type="radio" name="fumante" value="nao"
+                                        class="mr-1 text-solidarie-primary focus:ring-solidarie-primary"> Não</label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block font-medium">Possui alguma alergia?</label>
+                            <div class="mt-2 flex gap-x-6">
+                                <label><input type="radio" name="tem_alergia" value="sim"
+                                        class="mr-1 text-solidarie-primary focus:ring-solidarie-primary"> Sim</label>
+                                <label><input type="radio" name="tem_alergia" value="nao"
+                                        class="mr-1 text-solidarie-primary focus:ring-solidarie-primary"> Não</label>
+                            </div>
+                            <input type="text" name="alergia_descricao" placeholder="Se sim, descreva quais."
+                                class="mt-2 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <div>
+                            <label for="alimento_restricao" class="block font-medium">Há algum alimento que não possa
+                                consumir?</label>
+                            <input type="text" name="alimento_restricao" id="alimento_restricao"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block font-medium">Usa algum medicamento regular?</label>
+                            <div class="mt-2 flex gap-x-6">
+                                <label><input type="radio" name="tem_medicamento" value="sim"
+                                        class="mr-1 text-solidarie-primary focus:ring-solidarie-primary"> Sim</label>
+                                <label><input type="radio" name="tem_medicamento" value="nao"
+                                        class="mr-1 text-solidarie-primary focus:ring-solidarie-primary"> Não</label>
+                            </div>
+                            <textarea name="medicamento_descricao" rows="3"
+                                placeholder="Se sim, descreva a dosagem, frequência e horários."
+                                class="mt-2 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
+                        </div>
+                        <div>
+                            <label class="block font-medium">Qual a sua condição física atual?</label>
+                            <div class="mt-2 flex gap-x-6">
+                                <label><input type="radio" name="condicao_fisica" value="sedentario"
+                                        class="mr-1 text-solidarie-primary focus:ring-solidarie-primary">
+                                    Sedentário(a)</label>
+                                <label><input type="radio" name="condicao_fisica" value="regular"
+                                        class="mr-1 text-solidarie-primary focus:ring-solidarie-primary"> Exercícios
+                                    regulares</label>
+                                <label><input type="radio" name="condicao_fisica" value="intenso"
+                                        class="mr-1 text-solidarie-primary focus:ring-solidarie-primary"> Exercícios
+                                    intensos</label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Seção: Observações Médicas (para o médico) -->
+                <fieldset>
+                    <legend
+                        class="text-xl font-semibold text-solidarie-primary dark:text-solidarie-secondary mb-6 border-b border-gray-300 dark:border-gray-600 pb-2">
+                        Observações Médicas (Acompanhamento)</legend>
+                    <label for="observacoes_medicas"
+                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Observações iniciais do
+                        profissional:</label>
+                    <textarea name="observacoes_medicas" id="observacoes_medicas" rows="8"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-solidarie-primary focus:ring-solidarie-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
+                </fieldset>
+
+                <!-- Botão de Envio -->
+                <div class="pt-6 border-t border-gray-200 dark:border-gray-700">
+                    <button type="submit"
+                        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-solidarie-primary hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-solidarie-primary">
+                        Salvar Prontuário do Paciente
+                    </button>
+                    <a href="{{ url_for('index') }}"
+                        class="block text-center mt-4 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200">Cancelar</a>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+</body>
+
+</html>
